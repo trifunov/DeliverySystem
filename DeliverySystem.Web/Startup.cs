@@ -41,6 +41,10 @@ namespace DeliverySystem.Web
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IShipmentRepository, ShipmentRepository>();
             services.AddScoped<IShipmentManager, ShipmentManager>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderManager, OrderManager>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductManager, ProductManager>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -65,7 +69,7 @@ namespace DeliverySystem.Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Shipment}/{action=Index}/{id?}");
+                    template: "{controller=Order}/{action=Index}/{id?}");
             });
         }
     }

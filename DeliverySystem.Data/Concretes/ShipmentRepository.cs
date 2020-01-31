@@ -31,5 +31,12 @@ namespace DeliverySystem.Data.Concretes
             string sqlQuery = "EXEC [dbo].[SPShipmentsGetByAddressAndCategoryId] @address,@categoryId";
             return _context.Query<SPShipmentsGetByAddressAndCategoryId>().FromSql(sqlQuery, addressParameter, categoryParameter).ToList();
         }
+
+        public List<SPShipmentsGetByAddressAndCategoryId> GetBySelectedOrderIds(string orderIds)
+        {
+            SqlParameter ordersParameter = new SqlParameter("@orderIds", orderIds);
+            string sqlQuery = "EXEC [dbo].[SPShipmentsGetByAddressAndCategoryId] @orderIds";
+            return _context.Query<SPShipmentsGetByAddressAndCategoryId>().FromSql(sqlQuery, ordersParameter).ToList();
+        }
     }
 }

@@ -26,5 +26,10 @@ namespace DeliverySystem.Web.Controllers
         {
             return Ok(_shipmentManager.GetByAddressAndCategoryId(address, categoryId));
         }
+
+        public IActionResult GetBySelectedOrderIds(string orderIds)
+        {
+            return Ok(_shipmentManager.GetBySelectedOrderIds(orderIds));
+        }
     }
 }

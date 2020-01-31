@@ -9,5 +9,6 @@ namespace DeliverySystem.Service.Interfaces
     {
         List<ShipmentAllDTO> GetAll();
         List<ShipmentDTO> GetByAddressAndCategoryId(string address, int categoryId);
+        List<ShipmentDTO> GetBySelectedOrderIds(string orderIds);
     }
 }

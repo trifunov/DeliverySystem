@@ -9,5 +9,6 @@ namespace DeliverySystem.Data.Interfaces
     {
         List<SPShipmentsGetAll> GetAll();
         List<SPShipmentsGetByAddressAndCategoryId> GetByAddressAndCategoryId(string address, int categoryId);
+        List<SPShipmentsGetByAddressAndCategoryId> GetBySelectedOrderIds(string orderIds);
     }
 }

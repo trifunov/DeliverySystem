@@ -35,3 +35,12 @@ body {
         display: none;
     }
 }
+
+#ordersTable tbody tr {
+    cursor: pointer;
+}
+
+#ordersTable tbody tr.selected {
+    background-color: #337ab7;
+    color: white;
+}
