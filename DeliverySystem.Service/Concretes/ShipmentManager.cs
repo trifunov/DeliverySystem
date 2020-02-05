@@ -78,83 +78,50 @@ namespace DeliverySystem.Service.Concretes
             var shipmentDTOs = new List<ShipmentDTO>();
             var shipmentDTO = new ShipmentDTO { Orders = new List<ShipmentOrderDTO>() };
             var shipments = _shipmentRepository.GetBySelectedOrderIds(orderIds);
-            ShipmentOrderDTO currentOrder = null;
+            var currentAddress = "";
+            var currentCategoryId = 0;
 
             foreach (var shipment in shipments)
             {
-                if(currentOrder == null)
+                var currentOrder = new ShipmentOrderDTO
                 {
-                    currentOrder = new ShipmentOrderDTO
+                    OrderId = shipment.OrderId,
+                    Address = shipment.Address,
+                    City = shipment.City,
+                    State = shipment.State,
+                    Country = shipment.Country,
+                    FirstName = shipment.FirstName,
+                    LastName = shipment.LastName,
+                    ProductId = shipment.ProductId,
+                    ProductName = shipment.ProductName,
+                    ProductDescription = shipment.ProductDescription,
+                    SKU = shipment.ProductSKU,
+                    Quantity = shipment.Quantity,
+                    Price = string.Format("{0:0.00#}", shipment.Price),
+                    Total = string.Format("{0:0.00#}", shipment.Total),
+                    CategoryId = shipment.CategoryId,
+                    CategoryName = shipment.CategoryName
+                };
+                
+                if (shipment.Address != currentAddress || shipment.CategoryId != currentCategoryId)
+                {
+                    if (shipment != shipments.First())
                     {
-                        OrderId = shipment.OrderId,
-                        Address = shipment.Address,
-                        City = shipment.City,
-                        State = shipment.State,
-                        Country = shipment.Country,
-                        FirstName = shipment.FirstName,
-                        LastName = shipment.LastName,
-                        Products = new List<ShipmentProductDTO>()
-                    };
-                    //shipmentDTOs.Add(new ShipmentDTO { Orders = new List<ShipmentOrderDTO> { currentOrder } });
+                        shipmentDTOs.Add(shipmentDTO);
+                        shipmentDTO = new ShipmentDTO { Orders = new List<ShipmentOrderDTO>() };
+                    }
+                    shipmentDTO.Orders.Add(currentOrder);
+                    currentAddress = shipment.Address;
+                    currentCategoryId = shipment.CategoryId;
                 }
-                else if (currentOrder.OrderId != shipment.OrderId)
+                else
                 {
-                    var resultOrderCategories = shipmentDTOs.Select(o => o.Orders).SelectMany(sh => sh.Select(x => x.Products.Select(y => y.CategoryId).Distinct()), (orders, categories) => new { orders, categories });
-                    var currentOrderCategories = currentOrder.Products.Select(x => x.CategoryId).Distinct();
-                    var hasShipmentWithSameAddressAndCategory = resultOrderCategories.FirstOrDefault(x => x.orders.Any(y => y.Address == currentOrder.Address && y.City == currentOrder.City && y.State == currentOrder.State && y.Country == currentOrder.Country) && x.categories.Equals(currentOrderCategories));
-
-                    if(hasShipmentWithSameAddressAndCategory != null)
-                    {
-                        var existingShipmentDto = shipmentDTOs.First(y => y.Orders.First().Address == hasShipmentWithSameAddressAndCategory.orders.First().Address);
-                        existingShipmentDto.Orders.Add(currentOrder);
-                    }
-                    else
-                    {
-                        shipmentDTOs.Add(new ShipmentDTO { Orders = new List<ShipmentOrderDTO> { currentOrder } });
-                    }
-
-                    currentOrder = new ShipmentOrderDTO
-                    {
-                        OrderId = shipment.OrderId,
-                        Address = shipment.Address,
-                        City = shipment.City,
-                        State = shipment.State,
-                        Country = shipment.Country,
-                        FirstName = shipment.FirstName,
-                        LastName = shipment.LastName,
-                        Products = new List<ShipmentProductDTO>()
-                    };
+                    shipmentDTO.Orders.Add(currentOrder);
                 }
 
-                var product = new ShipmentProductDTO();
-                product.Id = shipment.ProductId;
-                product.Name = shipment.ProductName;
-                product.Description = shipment.ProductDescription;
-                product.SKU = shipment.ProductSKU;
-                product.Quantity = shipment.Quantity;
-                product.Price = string.Format("{0:0.00#}", shipment.Price);
-                product.Total = string.Format("{0:0.00#}", shipment.Total);
-                product.CategoryId = shipment.CategoryId;
-                product.CategoryName = shipment.CategoryName;
-                currentOrder.Products.Add(product);
-
-                if(shipment == shipments.Last())
+                if (shipment == shipments.Last())
                 {
-                    var resultOrderCategories = shipmentDTOs.Select(o => o.Orders).SelectMany(sh => sh.Select(x => x.Products.Select(y => y.CategoryId).Distinct()), (orders, categories) => new { orders, categories });
-                    var currentOrderCategories = currentOrder.Products.Select(x => x.CategoryId).Distinct();
-                    var hasShipmentWithSameAddressAndCategory = resultOrderCategories.FirstOrDefault(x => x.orders.Any(y => y.Address == currentOrder.Address && y.City == currentOrder.City && y.State == currentOrder.State && y.Country == currentOrder.Country) 
-                                                                                                       && x.categories.All(currentOrderCategories.Contains) 
-                                                                                                       && x.categories.Count() == currentOrderCategories.Count());
-
-                    if (hasShipmentWithSameAddressAndCategory != null)
-                    {
-                        var existingShipmentDto = shipmentDTOs.First(y => y.Orders.First().Address == hasShipmentWithSameAddressAndCategory.orders.First().Address);
-                        existingShipmentDto.Orders.Add(currentOrder);
-                    }
-                    else
-                    {
-                        shipmentDTOs.Add(new ShipmentDTO { Orders = new List<ShipmentOrderDTO> { currentOrder } });
-                    }
+                    shipmentDTOs.Add(shipmentDTO);
                 }
             }
 
