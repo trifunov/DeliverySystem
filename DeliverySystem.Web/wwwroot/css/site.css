@@ -28,19 +28,19 @@ body {
     margin: 15px;
 }
 
+#ordersTable tbody tr {
+    cursor: pointer;
+}
+
+    #ordersTable tbody tr.selected {
+        background-color: #337ab7;
+        color: white;
+    }
+
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */
     .carousel-caption {
         display: none;
     }
-}
-
-#ordersTable tbody tr {
-    cursor: pointer;
-}
-
-#ordersTable tbody tr.selected {
-    background-color: #337ab7;
-    color: white;
 }
