@@ -85,7 +85,7 @@ namespace DeliverySystem.Service.Concretes
             {
                 var currentOrder = new ShipmentOrderDTO
                 {
-                    OrderId = shipment.OrderId,
+                    OrderId = Guid.NewGuid(),
                     Address = shipment.Address,
                     City = shipment.City,
                     State = shipment.State,

@@ -6,7 +6,7 @@ namespace DeliverySystem.Service.DTOs
 {
     public class ShipmentOrderDTO
     {
-        public int OrderId { get; set; }
+        public Guid OrderId { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
         public string State { get; set; }
